@@ -39,6 +39,11 @@ public class ReservationService {
         }
     }
 
+    public Optional<Reservation> getReservationById(Long id) {
+        return reservationRepository.findById(id);
+    }
+
+
 
     public void cancelledReservation(Long id) {
         Optional<Reservation> reservation = reservationRepository.findById(id);

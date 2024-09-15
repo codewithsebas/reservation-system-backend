@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/reservations")
@@ -34,6 +35,7 @@ public class ReservationController {
         return new ResponseEntity<>(reservations, HttpStatus.OK);
     }
 
+
     @PostMapping
     public ResponseEntity<Reservation> createReservation(@RequestBody ReservationDTO reservationDTO) {
         try {
@@ -50,6 +52,26 @@ public class ReservationController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Reservation> getReservationById(
+            @PathVariable Long id,
+            @RequestHeader("Authorization") String token) {
+        // Validar token
+        validateToken(token);
+
+        try {
+            Optional<Reservation> reservation = reservationService.getReservationById(id);
+            if (reservation.isPresent()) {
+                return new ResponseEntity<>(reservation.get(), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+    }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateReservation(
