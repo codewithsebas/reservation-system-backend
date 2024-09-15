@@ -2,7 +2,7 @@ package com.linktic.reservation_system.model;
 
 import lombok.Data;
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 @Entity
@@ -12,8 +12,9 @@ public class Reservation {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     private String reservationDetails;
-    private LocalDateTime reservationDate;
+    private LocalDate reservationDate;
 }
