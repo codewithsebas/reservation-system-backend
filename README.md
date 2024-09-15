@@ -79,6 +79,11 @@ Once the application is running, you can access it at `http://localhost:8080`.
 - **PUT** `/reservations/{id}`: Update a reservation (token required).
 - **DELETE** `/reservations/{id}`: Delete a reservation (token required).
 - **GET** `/reservations`: List all reservations (token required).
+- **GET** `/reservations/{id}`: List reservation by id (token required).
+
+### Documentation POSTMAN
+
+- [Reservation System API Documentation](https://www.postman.com/satellite-geoscientist-17392290/workspace/reservation-system-api/collection/33340165-b781e3fa-427b-4272-bfda-183d4e198e97?action=share&creator=33340165)
 
 ### JWT Authentication
 
