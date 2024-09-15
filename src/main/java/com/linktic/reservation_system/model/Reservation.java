@@ -13,7 +13,7 @@ public class Reservation {
 
     @ManyToOne
     private User user;
-    
+
     private String reservationDetails;
     private LocalDateTime reservationDate;
 }
