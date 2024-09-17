@@ -3,8 +3,12 @@ package com.linktic.reservation_system.service;
 import com.linktic.reservation_system.exception.UserAlreadyExistsException;
 import com.linktic.reservation_system.model.Reservation;
 import com.linktic.reservation_system.repository.ReservationRepository;
+import com.linktic.reservation_system.specification.ReservationSpecifications;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +36,7 @@ public class ReservationService {
             Reservation updatedReservation = existingReservation.get();
             updatedReservation.setReservationDetails(reservation.getReservationDetails());
             updatedReservation.setReservationDate(reservation.getReservationDate());
+            updatedReservation.setServiceTitle(reservation.getServiceTitle());
             updatedReservation.setUser(reservation.getUser());
             return reservationRepository.save(updatedReservation);
         } else {
@@ -52,5 +57,22 @@ public class ReservationService {
         } else {
             throw new RuntimeException("Reserva no encontrada");
         }
+    }
+
+
+    public List<Reservation> filterReservations(String username, String serviceTitle, LocalDate startDate, LocalDate endDate) {
+        Specification<Reservation> specification = Specification.where(null);
+
+        if (username != null && !username.isEmpty()) {
+            specification = specification.and(ReservationSpecifications.hasUsername(username));
+        }
+        if (serviceTitle != null && !serviceTitle.isEmpty()) {
+            specification = specification.and(ReservationSpecifications.hasServiceTitle(serviceTitle));
+        }
+        if (startDate != null && endDate != null) {
+            specification = specification.and(ReservationSpecifications.reservationDateBetween(startDate, endDate));
+        }
+
+        return reservationRepository.findAll(specification);
     }
 }

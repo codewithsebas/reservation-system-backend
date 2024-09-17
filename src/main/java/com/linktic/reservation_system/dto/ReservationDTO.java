@@ -8,4 +8,5 @@ public class ReservationDTO {
     private Long userId;
     private LocalDate reservationDate;
     private String reservationDetails;
+    private String serviceTitle;
 }

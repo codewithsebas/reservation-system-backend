@@ -17,4 +17,5 @@ public class Reservation {
 
     private String reservationDetails;
     private LocalDate reservationDate;
+    private String serviceTitle;
 }

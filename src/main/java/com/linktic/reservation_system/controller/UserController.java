@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
@@ -35,25 +36,41 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody User user) {
+        Map<String, Object> response = new HashMap<>();
+
         try {
-            // Encriptar la contraseña ingresada antes de compararla
+            // Buscar al usuario por email
+            Optional<User> foundUserOpt = userService.findByEmail(user.getEmail());
+
+            // Verificar si el usuario existe
+            if (!foundUserOpt.isPresent()) {
+                throw new RuntimeException("El usuario con el email proporcionado no existe.");
+            }
+
+            User foundUser = foundUserOpt.get();
+
+            // Validar la contraseña
             String encryptedPassword = PasswordUtil.encryptPassword(user.getPassword());
+            if (!foundUser.getPassword().equals(encryptedPassword)) {
+                throw new RuntimeException("Contraseña incorrecta.");
+            }
 
-            User foundUser = userService.findByEmail(user.getEmail())
-                    .filter(u -> u.getPassword().equals(encryptedPassword)) // Comparar contraseñas encriptadas
-                    .orElseThrow(() -> new RuntimeException("Invalidos email o contraseña"));
-
+            // Generar token si las credenciales son correctas
             String token = tokenService.generateToken(foundUser.getEmail());
 
-            Map<String, Object> response = new HashMap<>();
+            // Construir la respuesta
             response.put("token", token);
             response.put("userId", foundUser.getId());
+            response.put("username", foundUser.getUsername());
+            response.put("email", foundUser.getEmail());
 
             return new ResponseEntity<>(response, HttpStatus.OK);
+
         } catch (RuntimeException e) {
-            Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("error", e.getMessage());
-            return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+            // Manejo de excepciones con mensaje de error adecuado
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
         }
     }
+
 }

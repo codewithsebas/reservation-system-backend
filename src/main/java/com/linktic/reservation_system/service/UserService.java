@@ -1,12 +1,15 @@
 package com.linktic.reservation_system.service;
 
 import com.linktic.reservation_system.exception.UserAlreadyExistsException;
+import com.linktic.reservation_system.model.Reservation;
 import com.linktic.reservation_system.model.User;
+import com.linktic.reservation_system.repository.ReservationRepository;
 import com.linktic.reservation_system.repository.UserRepository;
 import com.linktic.reservation_system.util.PasswordUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -15,8 +18,15 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private ReservationRepository reservationRepository;
+
     public Optional<User> findById(Long userId) {
         return userRepository.findById(userId);
+    }
+
+    public List<Reservation> findReservationsByUserId(Long userId) {
+        return reservationRepository.findByUserId(userId);
     }
 
     public User registerUser(User user) {

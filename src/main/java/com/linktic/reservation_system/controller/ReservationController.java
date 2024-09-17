@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,10 +30,25 @@ public class ReservationController {
     private UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<Reservation>> getAllReservations(@RequestHeader("Authorization") String token) {
-        validateToken(token);
+    public ResponseEntity<List<Reservation>> getAllReservations() {
         List<Reservation> reservations = reservationService.getAllReservations();
         return new ResponseEntity<>(reservations, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<Reservation>> getReservationsByUserId(
+            @PathVariable Long userId,
+            @RequestHeader("Authorization") String token) {
+        // Validar token
+        validateToken(token);
+
+        try {
+            List<Reservation> reservations = reservationService.findReservationsByUserId(userId);
+            return new ResponseEntity<>(reservations, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
     }
 
 
@@ -44,6 +60,7 @@ public class ReservationController {
             Reservation reservation = new Reservation();
             reservation.setReservationDetails(reservationDTO.getReservationDetails());
             reservation.setReservationDate(reservationDTO.getReservationDate());
+            reservation.setServiceTitle(reservationDTO.getServiceTitle());
             reservation.setUser(user);
 
             Reservation createdReservation = reservationService.createReservation(reservation);
@@ -92,6 +109,7 @@ public class ReservationController {
             reservation.setId(id);
             reservation.setReservationDetails(reservationDTO.getReservationDetails());
             reservation.setReservationDate(reservationDTO.getReservationDate());
+            reservation.setServiceTitle(reservationDTO.getServiceTitle());
             reservation.setUser(user);
 
             // Actualizar la reserva
@@ -116,6 +134,18 @@ public class ReservationController {
         } catch (RuntimeException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
+    }
+
+
+    @GetMapping("/filter")
+    public ResponseEntity<List<Reservation>> filterReservations(
+            @RequestParam(required = false) String username,
+            @RequestParam(required = false) String serviceTitle,
+            @RequestParam(required = false) LocalDate startDate,
+            @RequestParam(required = false) LocalDate endDate) {
+
+        List<Reservation> filteredReservations = reservationService.filterReservations(username, serviceTitle, startDate, endDate);
+        return new ResponseEntity<>(filteredReservations, HttpStatus.OK);
     }
 
     private void validateToken(String token) {
