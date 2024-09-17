@@ -1,37 +1,37 @@
 
-# Reservation System
+# Sistema de Reservas
 
-This is a Spring Boot application for a reservation system. It includes user registration, login, JWT-based authentication, and CRUD operations for reservations.
+Esta es una aplicación de Spring Boot para un sistema de reservas. Incluye registro de usuarios, inicio de sesión, autenticación basada en JWT y operaciones CRUD para las reservas.
 
-## Prerequisites
+## Requisitos previos
 
-- Java 17 or higher
-- Maven 3.6.3 or higher
-- MySQL database
+- Java 17 o superior
+- Maven 3.6.3 o superior
+- Base de datos MySQL
 - Git
 
-## Getting Started
+## Empezando
 
-### 1. Clone the repository
+### 1. Clonar el repositorio
 
-First, clone the repository to your local machine:
+Primero, clona el repositorio en tu máquina local:
 
 ```bash
 git clone https://github.com/codewithsebas/reservation-system-backend.git
 cd reservation-system-backend
 ```
 
-### 2. Set up the MySQL database
+### 2. Configurar la base de datos MySQL
 
-Create a MySQL database called `reservation_db` (or the name you prefer) and set up the connection in the `application.properties` file.
+Crea una base de datos MySQL llamada reservation_db (o el nombre que prefieras) y configura la conexión en el archivo application.properties.
 
 ```sql
 CREATE DATABASE reservation_db;
 ```
 
-### 3. Configure `application.properties`
+### 3. Configurar `application.properties`
 
-In the `src/main/resources/application.properties` file, update the following properties with your local database configuration:
+En el archivo src/main/resources/application.properties, actualiza las siguientes propiedades con la configuración de tu base de datos local:
 
 ```properties
 spring.datasource.url=jdbc:mysql://localhost:3306/reservation_db
@@ -45,56 +45,46 @@ jwt.secret=mySecretKey
 jwt.expiration=3600000
 ```
 
-Replace `your_mysql_username` and `your_mysql_password` with your actual MySQL credentials.
+Reemplaza tu_usuario_mysql y tu_contraseña_mysql con tus credenciales reales de MySQL.
 
 
-### 4. Install Extensions Visual Studio Code or Use IntelliJ IDEA
+### 4. Instalar extensiones de Visual Studio Code o usar IntelliJ IDEA
+
+Instala las siguientes extensiones:
+
 
 `Extension Pack for Java`
 `Spring Boot Extension Pack`
 
-### 4. Build the project
+### 4. Compilar el proyecto
 
-Run the following Maven command to build the project:
+Ejecuta el siguiente comando de Maven para compilar el proyecto:
 
-`bash
-it looks like in the main application file, right click and select Run Java
+`
+haga clic con el botón derecho y seleccione Ejecutar Java
 `
 
-### Or
+### O
 
-You can run the application using SPRING BOOT DASHBOARD, click on the left bar where you see a Spring Boot logo:
+Puedes ejecutar la aplicación usando el SPRING BOOT DASHBOARD, haciendo clic en la barra lateral izquierda donde ves el logotipo de Spring Boot:
 
 `run project`
 
-### 6. Access the application
 
-Once the application is running, you can access it at `http://localhost:8080`.
+### Documentación POSTMAN
 
-### Endpoints
+- [Reservation System API Documentation](https://www.postman.com/satellite-geoscientist-17392290/workspace/reservation-system-api/collection/33340165-8a12f120-9bfc-4f03-a51c-2b81e540494f?action=share&creator=33340165)
 
-- **POST** `/users/register`: Register a new user.
-- **POST** `/users/login`: Log in with email and password, returns a JWT token.
-- **POST** `/reservations`: Create a reservation (token required).
-- **PUT** `/reservations/{id}`: Update a reservation (token required).
-- **DELETE** `/reservations/{id}`: Delete a reservation (token required).
-- **GET** `/reservations`: List all reservations (token required).
-- **GET** `/reservations/{id}`: List reservation by id (token required).
+### Autenticación JWT
 
-### Documentation POSTMAN
-
-- [Reservation System API Documentation](https://www.postman.com/satellite-geoscientist-17392290/workspace/reservation-system-api/collection/33340165-b781e3fa-427b-4272-bfda-183d4e198e97?action=share&creator=33340165)
-
-### JWT Authentication
-
-Once you log in, the application returns a JWT token. Use this token for subsequent requests by including it in the `Authorization` header as follows:
+Una vez que inicies sesión, la aplicación devolverá un token JWT. Usa este token para solicitudes posteriores, incluyéndolo en el encabezado Authorization de la siguiente manera:
 
 ```
 Key: Authorization
 Value: Token
 ```
 
-## Technologies
+## Technologias
 
 - Spring Boot
 - MySQL
@@ -102,7 +92,7 @@ Value: Token
 - Maven
 - Lombok
 
-## Troubleshooting
+## Solución de problemas
 
-- Ensure MySQL is running and accessible on `localhost:3306`.
-- Check that the `application.properties` file contains the correct MySQL credentials.
+- Asegúrate de que MySQL esté en funcionamiento y accesible en `localhost:3306`.
+- Verifica que el archivo `application.properties` contenga las credenciales correctas de MySQL.
